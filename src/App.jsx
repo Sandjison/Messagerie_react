@@ -7,6 +7,7 @@ import Login from './pages/login/login';
 import Dashboard from './pages/dashboard/dashboard';
 import Groups from './pages/groups/groups';
 import CreateGroup from './pages/createGroup/createGroup';
+import AddMember from './pages/members/addMember';
 
 
 export default function App() {
@@ -41,7 +42,13 @@ export default function App() {
 
       // element: <CreateGroup />
       element: <CreateGroup />
-    }
+    },
+    {
+      path: "/addMember",
+
+      // element: <CreateGroup />
+      element: <AddMember />
+    },
 
 
 
