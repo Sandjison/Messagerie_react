@@ -8,8 +8,8 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
- //navige
+
+  //navige
   const navigate = useNavigate();
 
   const handle_register = async (e) => {

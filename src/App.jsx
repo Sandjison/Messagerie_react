@@ -1,13 +1,12 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-// import Form from './register';
-// import Login from './login';
 import Register from './pages/register/register'
 import Login from './pages/login/login';
 import Dashboard from './pages/dashboard/dashboard';
 import Groups from './pages/groups/groups';
 import CreateGroup from './pages/createGroup/createGroup';
 import AddMember from './pages/members/addMember';
+import AddGuest from './pages/guests/addGuest';
 
 
 export default function App() {
@@ -39,15 +38,17 @@ export default function App() {
 
     {
       path: "/createGroup",
-
-      // element: <CreateGroup />
       element: <CreateGroup />
     },
+
     {
       path: "/addMember",
-
-      // element: <CreateGroup />
       element: <AddMember />
+    },
+
+    {
+      path: "/addGuest",
+      element: <AddGuest />
     },
 
 
