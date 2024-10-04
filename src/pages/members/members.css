@@ -3,3 +3,46 @@ a{
     color: rgba(0, 0, 0, 0.684);
 }
 
+@media (max-width: 460px) {
+    .list-user-item .email-add {
+        flex-direction: column; /* Empile l'email et le bouton verticalement */
+        align-items: flex-start; /* Aligne les éléments sur le bord gauche */
+    }
+
+    .list-user-item .email-add button {
+        margin-top: 0.5rem; /* Ajouter un espace entre l'email et le bouton */
+        width: 100%; /* Assurez-vous que le bouton prend toute la largeur */
+    }
+}
+
+@media (max-width: 360px) {
+    .email-add {
+        flex-direction: column; /* Empile l'email et le bouton verticalement */
+        align-items: flex-start; /* Aligne les éléments sur le bord gauche */
+    }
+
+    .email-add span {
+        word-wrap: break-word; /* Permet le retour à la ligne si le texte déborde */
+        overflow: hidden; /* Masque le texte qui déborde */
+        text-overflow: ellipsis; /* Ajoute des ellipses pour le texte débordant */
+        white-space: nowrap; /* Empêche le retour à la ligne automatique */
+        width: 100%; /* Assure que l'email prend toute la largeur disponible */
+    }
+
+    .email-add button {
+        margin-top: 0.5rem; /* Ajouter un espace entre l'email et le bouton */
+        width: 100%; /* Assurez-vous que le bouton prend toute la largeur */
+    }
+}
+
+@media (max-width: 460px) {
+    .list-user-item .email-add {
+        flex-direction: column; /* Empile l'email et le bouton verticalement */
+        align-items: flex-start; /* Aligne les éléments sur le bord gauche */
+    }
+
+    .list-user-item .email-add button {
+        margin-top: 0.5rem; /* Ajouter un espace entre l'email et le bouton */
+        width: 100%; /* Assurez-vous que le bouton prend toute la largeur */
+    }
+}

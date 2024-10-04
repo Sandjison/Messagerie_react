@@ -9,7 +9,7 @@ export default function Groups() {
     const [currentGroup, setCurrentGroup] = useState(null); // Stocke l'ID du groupe sélectionné
     const [groupMessages, setGroupMessages] = useState([]); // Stocke les messages du groupe
     const [messageContent, setMessageContent] = useState(''); // Contenu du message à envoyer
-    const [selectedFile, setSelectedFile] = useState(null); // Fichier à envoyer (optionnel)
+    const [selectedFile, setSelectedFile] = useState(false); // Fichier à envoyer (optionnel)
     const fileInputRef = useRef(null); // Référence pour l'input file
 
     const currentUserId = localStorage.getItem("user_id");
@@ -46,9 +46,9 @@ export default function Groups() {
     }, [currentGroup]);
 
     // Fonction pour gérer la sélection du fichier
-    const handleFileChange = (e) => {
-        setSelectedFile(e.target.files[0]);
-    };
+    // const handleFileChange = (e) => {
+    //     setSelectedFile(e.target.files[0]);
+    // };
 
     // Fonction pour gérer le changement de message
     const handleMessageChange = (e) => {
@@ -56,22 +56,25 @@ export default function Groups() {
     };
 
     // Fonction pour envoyer le message
-    const sendMessage = () => {
-        if (messageContent.trim() !== '' || selectedFile) {
+    const sendMessage = async () => {
+
+        console.log(localStorage.getItem("token"));
+        console.log(currentGroup);
+        
+        
             const formData = new FormData();
-            formData.append('groupId', 1);
+            formData.set('group_id', currentGroup);
             if (selectedFile) {
-                formData.append('file', selectedFile);
+                formData.set('file', selectedFile);
             }
 
-            const response = axios.post(`http://127.0.0.1:8000/api/v1.0.0/file`, formData, {
+            const response = await axios.post(`http://127.0.0.1:8000/api/v1.0.0/file`, formData, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            console.log(response)
-        }
+            console.log(response.data.data)
     };
 
     return (
@@ -220,7 +223,9 @@ export default function Groups() {
                                     type="file"
                                     ref={fileInputRef}
                                     style={{ display: 'none' }}
-                                    onChange={handleFileChange}
+                                    onChange={(e) => {
+                                        setSelectedFile(() => e.target.files[0])
+                                    }}
                                     accept="image/*"
                                 />
                                 <div className="conversation-form-group">
