@@ -22,9 +22,11 @@ export default function Login() {
         password: password
       });
 
-      console.log('Connexion réussie:', response.data.data[0].id);
+      localStorage.setItem('token', response.data.data.token);
 
-      localStorage.setItem('user_id', response.data.data[0].id);
+      console.log('Connexion réussie:', response.data.data.token);
+
+      localStorage.setItem('user_id', response.data.data.id);
 
 
       // Navigation vers une page après connexion, par exemple "/dashboard"
@@ -34,7 +36,7 @@ export default function Login() {
       if (error.response) {
         console.error('Erreur lors de la requête:', error.response.data);
       } else {
-        console.error('Erreur inconnue:', error.message);
+        console.error('Erreur inconnue:', error);
       }
     }
   };

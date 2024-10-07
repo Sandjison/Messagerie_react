@@ -8,22 +8,26 @@ import '../members/members.css';
 export default function AddMember() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [currentGroup, setCurrentGroup] = useState(localStorage.getItem("group_id")); // Stocke l'ID du groupe sélectionné
+    const [currentGroup, setCurrentGroup] = useState(localStorage.getItem("group_id"));
     const navigate = useNavigate();
 
     async function connexion() {
-        const response = await axios.get("http://127.0.0.1:8000/api/v1.0.0/show_user");
+        const response = await axios.get("http://127.0.0.1:8000/api/v1.0.0/show_user",
+            { headers: { 'Authorization': `Bearer ` + localStorage.getItem('token'), } });
         setLoading(false);
         setUsers(response.data.utilisateurs);
     }
+    console.log(localStorage.getItem('token'));
+    
 
     // Fonction pour ajouter un utilisateur au groupe
-    const addUserToGroup = async (email) => {
+    const addUserToGroup = async (user_id) => {
         try {
             // Envoie la requête pour ajouter l'utilisateur
-            await axios.post(`http://127.0.0.1:8000/api/v1.0.0/member/${currentGroup}`, { email });
+            // const response = await axios.post(`http://127.0.0.1:8000/api/v1.0.0/member/1/1`,
+            await axios.post(`http://127.0.0.1:8000/api/v1.0.0/member/${user_id}/${currentGroup}`, {},
+                { headers: { 'Authorization': `Bearer ` + localStorage.getItem('token'), } });
 
-            // Redirige vers la page des groupes
             navigate('/groups');
         } catch (error) {
             console.error("Erreur lors de l'ajout de l'utilisateur :", error);
@@ -53,8 +57,7 @@ export default function AddMember() {
                                                     {/* Bouton pour ajouter l'utilisateur */}
                                                     <button
                                                         className="btn btn-light btn-sm"
-                                                        onClick={() => addUserToGroup(user.email)}
-                                                    >
+                                                        onClick={() => addUserToGroup(user.id)}>
                                                         Ajouter
                                                     </button>
                                                 </div>

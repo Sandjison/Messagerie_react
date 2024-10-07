@@ -16,8 +16,8 @@ export default function AddGuest() {
     try {
       // Envoi de l'e-mail au serveur pour inviter une personne
       const response = await axios.post(`http://127.0.0.1:8000/api/v1.0.0/guest/${currentGroup}`, {
-        email: email,
-      });
+        email: email 
+      } , { headers: { 'Authorization': `Bearer ` + localStorage.getItem('token'), } });
 
       // Supposons que l'ID du groupe soit renvoyé dans la réponse du serveur
       const groupId = response.data.data[0].group_id; // Récupération de l'ID du groupe
