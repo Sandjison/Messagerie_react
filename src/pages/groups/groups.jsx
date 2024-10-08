@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { format } from 'date-fns';
 import '../dashboard/dashboard.css';
 import '../dashboard/tailwindcss-colors.css';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +15,17 @@ export default function Groups() {
 
     const currentUserId = localStorage.getItem("user_id");
 
+    const groupeMessageFunction = async () => {
+        // Récupérer l'ID de l'utilisateur à partir du localStorage
+        // const messageResponse = await axios.get(`http://127.0.0.1:8000/api/v1.0.0/show_file/${currentGroup}`);
+        const messageResponse = await axios.get(`http://127.0.0.1:8000/api/v1.0.0/show_file/${currentGroup}`, {
+            headers: { Authorization: "Bearer " + localStorage.getItem('token') },
+        });
+
+        setGroupMessages(() => messageResponse.data.data[0])
+        console.log(messageResponse.data.data[0]);
+    };
+
     useEffect(() => {
         // Fetch les groupes depuis l'API
         axios.get(`http://127.0.0.1:8000/api/v1.0.0/show_group`, {
@@ -25,22 +37,27 @@ export default function Groups() {
             .catch((err) => {
                 console.log(err);
             });
+        // groupeMessageFunction()
     }, []);
 
     useEffect(() => {
-        // Charger les messages du groupe sélectionné
-        if (currentGroup) {
-            axios.get(`http://127.0.0.1:8000/api/v1.0.0/group/${currentGroup}/messages`, {
-                headers: { Authorization: "Bearer " + localStorage.getItem('token') },
-            })
-                .then((res) => {
-                    setGroupMessages(res.data.messages); // Stocke les messages du groupe
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
+        groupeMessageFunction()
     }, [currentGroup]);
+
+    // useEffect(() => {
+    //     // Charger les messages du groupe sélectionné
+    //     if (currentGroup) {
+    //         axios.get(`http://127.0.0.1:8000/api/v1.0.0/group/${currentGroup}/messages`, {
+    //             headers: { Authorization: "Bearer " + localStorage.getItem('token') },
+    //         })
+    //             .then((res) => {
+    //                 setGroupMessages(res.data.messages); // Stocke les messages du groupe
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+    // }, [currentGroup]);
 
     // Fonction pour gérer le changement de message
     const handleMessageChange = (e) => {
@@ -172,32 +189,73 @@ export default function Groups() {
                             </div>
                             <div className="conversation-main">
                                 <ul className="conversation-wrapper">
-                                    {/* Affichage des messages du groupe */}
                                     {groupMessages.map((message, index) => (
-                                        <li key={index} className={`conversation-item ${message.user_id === currentUserId ? 'me' : ''}`}>
-                                            <div className="conversation-item-side">
-                                                <img className="conversation-item-image" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8cGVvcGxlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="sender profile" />
-                                            </div>
+                                        <li key={index} className={`conversation-item`}>
+
                                             <div className="conversation-item-content">
                                                 <div className="conversation-item-box">
-                                                    <div className="conversation-item-text">
-                                                        <p>{message.content}</p>
-                                                        {/* Affichage de l'image si présente */}
-                                                        {message.file_url && (
-                                                            <img
-                                                                src={`http://127.0.0.1:8000/uploads/${message.file_url}`}
-                                                                alt="uploaded file"
-                                                                className="uploaded-image"
-                                                            />
-                                                        )}
-                                                        <div className="conversation-item-time">{message.created_at}</div>
-                                                    </div>
+                                                    <a href={`http://localhost:8000/uploads/${message.file}`} target='_blank'>
+                                                        <div className="conversation-item-text">
+                                                            {message.file}
+                                                            <div className="conversation-item-time">
+                                                                {format(new Date(message.created_at), 'dd/MM/yyyy HH:mm')}
+                                                            </div>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
+
                                         </li>
                                     ))}
                                 </ul>
                             </div>
+
+                            {/* <div className="conversation-main">
+                                <ul className="conversation-wrapper">
+                                    <li className="conversation-item me">
+                                        <div className="conversation-item-side">
+                                            <img
+                                                className="conversation-item-image"
+                                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8cGVvcGxlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="profile" />
+                                        </div>
+                                        <div className="conversation-item-content">
+                                            <div className="conversation-item-wrapper">
+                                                <div className="conversation-item-box">
+                                                    <div className="conversation-item-text">
+                                                        <p>
+                                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, tenetur!
+                                                        </p>
+                                                        <div
+                                                            className="conversation-item-time">12:30</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="conversation-item">
+                                        <div className="conversation-item-side">
+                                            <img
+                                                className="conversation-item-image"
+                                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8cGVvcGxlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
+                                                alt="user" />
+                                        </div>
+                                        <div className="conversation-item-content">
+                                            <div className="conversation-item-wrapper">
+                                                <div className="conversation-item-box">
+                                                    <div className="conversation-item-text">
+                                                        <p>
+                                                            Lorem, ipsum dolor sit amet consectetur
+                                                            adipisicing elit.
+                                                        </p>
+                                                        <div
+                                                            className="conversation-item-time">12:30</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div> */}
                             <form onSubmit={sendMessage}>
                                 <div className="conversation-form">
                                     {/* Bouton pour sélectionner un fichier */}
